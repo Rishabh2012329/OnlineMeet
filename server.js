@@ -5,6 +5,9 @@ const io = require('socket.io')(server)
 const {v4:uuidv4} = require('uuid')
 const {ExpressPeerServer} = require('peer')
 const peerServrer = ExpressPeerServer(server,{debug:true})
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 app.set('view engine','ejs')
 
@@ -28,5 +31,5 @@ io.on('connection',(socket)=>{
     
 })
 
-server.listen(3000)
+server.listen(process.env.PORT)
 
