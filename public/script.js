@@ -98,10 +98,13 @@ const playStop = () => {
 //video stream
 function addVideoStream(video,stream){
     video.srcObject=stream
+    const div = document.createElement('div')
+    div.classList.add('videoOuter')
     video.addEventListener('loadedmetadata',()=>{
         video.play()
     })
-    document.getElementById('video-grid').appendChild(video)
+    div.appendChild(video)
+    document.getElementById('video-grid').appendChild(div)
 }
 
 
