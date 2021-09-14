@@ -6,7 +6,7 @@ const peer = new Peer(undefined,{
 })
 
 
-
+let myVideoStream;
 const myVideo = document.createElement('video')
 myVideo.muted=true
 
@@ -15,7 +15,9 @@ navigator.mediaDevices.getUserMedia({
     audio:true
 }).then(stream=>{
     
-    
+    myVideoStream=stream
+    document.getElementById('audio').onclick=muteUnmute
+    document.getElementById('video').onclick=playStop
     // provide our stream
     peer.on('call',call=>{
         call.answer(stream)
@@ -66,8 +68,30 @@ function ConnectToAnotherUser(userId,stream){
 // send video and audio
 
 // mute audio 
+const muteUnmute = () => {
+    const enabled = myVideoStream.getAudioTracks()[0].enabled;
+    if (enabled) {
+      myVideoStream.getAudioTracks()[0].enabled = false;
+      console.log("muted")
+      setStopAudio();
+    } else {
+      setPlayAudio();
+      myVideoStream.getAudioTracks()[0].enabled = true;
+    }
+  }
 
 // disable video
+const playStop = () => {
+    console.log('object')
+    let enabled = myVideoStream.getVideoTracks()[0].enabled;
+    if (enabled) {
+      myVideoStream.getVideoTracks()[0].enabled = false;
+      setStopVideo()
+    } else {
+      setPlayVideo()
+      myVideoStream.getVideoTracks()[0].enabled = true;
+    }
+  }
 
 // chat update
 
@@ -81,3 +105,20 @@ function addVideoStream(video,stream){
 }
 
 
+const setPlayVideo=()=>{
+    document.getElementById('video').classList.remove('fa-video-slash')
+    document.getElementById('video').classList.add('fa-video')
+}
+const setStopVideo=()=>{
+    document.getElementById('video').classList.remove('fa-video')
+    document.getElementById('video').classList.add('fa-video-slash')
+}
+
+const setPlayAudio=()=>{
+    document.getElementById('audio').classList.remove('fa-microphone-slash')
+    document.getElementById('audio').classList.add('fa-microphone')
+}
+const setStopAudio=()=>{
+    document.getElementById('audio').classList.remove('fa-microphone')
+    document.getElementById('audio').classList.add('fa-microphone-slash')
+}

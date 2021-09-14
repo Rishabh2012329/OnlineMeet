@@ -24,22 +24,37 @@
     .video-grid{
         display: grid;
         grid-template-columns: repeat(auto-fill,350px);
-        width: 100%;
+        width: fit-content;
         height: fit-content;
     }
     video{
         width: 350px;
     }
+    .flex{
+        display: flex;
+    }
+    .flex-row{
+        flex-direction: row;
+    }
+    .align-center{
+        align-items: center;
+    }
+    .justify-center{
+        justify-content: center;
+    }
+    i{
+        margin: 5px
+    }
 </style>
 <body>
-    <div style="display: flex;align-items: center;justify-content: center;height: 100%;">
+    <div style="display: flex;align-items: center;justify-content: center;height: 95%;width: 100%;">
         <div id="video-grid" class="video-grid">
 
         </div>
     </div>
-    <div>
-        <i class="fa fa-microphone" style="color: aliceblue;"></i>
-        <i class="fa fa-video" style="color: aliceblue;"></i>
+    <div class="flex flex-row justify-center">
+        <i id="audio" class="fa fa-microphone" style="color: aliceblue;"></i>
+        <i id="video" class="fa fa-video" style="color: aliceblue;"></i>
     </div>
 </body>
 </html>
