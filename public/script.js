@@ -27,6 +27,7 @@ navigator.mediaDevices.getUserMedia({
     })
     addVideoStream(myVideo,stream)
     socket.on('user-connected',(userId)=>{
+        console.log(userId)
         setTimeout(ConnectToAnotherUser,3000,userId,stream);
         
     })
@@ -45,7 +46,6 @@ peer.on('open',(id)=>{
 
 // add other uservideos to ours
 function ConnectToAnotherUser(userId,stream){
-   console.log("connect",stream)
     const call = peer.call(userId,stream)
     const video = document.createElement("video")
     call.on('stream',userVideoStream=>{
