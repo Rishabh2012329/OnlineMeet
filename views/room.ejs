@@ -22,13 +22,15 @@
     }
 
     .video-grid{
-        display: grid;
-        grid-template-columns: repeat(auto-fill,350px);
-        width: fit-content;
-        height: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
     }
     video{
         width: 350px;
+        border-radius: 6px;
+        margin:8px;
     }
     .flex{
         display: flex;
