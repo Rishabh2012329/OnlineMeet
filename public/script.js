@@ -100,10 +100,14 @@ function addVideoStream(video,stream){
     video.srcObject=stream
     const div = document.createElement('div')
     div.classList.add('videoOuter')
+    const overlay = document.createElement('div')
+    overlay.classList.add('overlay')
+    
     video.addEventListener('loadedmetadata',()=>{
         video.play()
     })
     div.appendChild(video)
+    div.appendChild(overlay)
     document.getElementById('video-grid').appendChild(div)
 }
 

@@ -19,24 +19,32 @@
     body{
         background-color: black;
         height: 100vh;
+        margin:0px;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
     }
 
     .video-grid{
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
+        overflow: auto;
     }
     video{
-        width: 400px;
+        max-width: 400px;
         border-radius: 6px;
         height: 350px;
         object-fit: cover;
     }
     .videoOuter{
-        width: 400px;
-        height: 400px;
-        margin:8px;
+        max-width: 400px;
+        border-radius: 6px;
+        height: 350px;
+        position: relative;
+        overflow: hidden;
+        background-color: #636363;
     }
     .flex{
         display: flex;
@@ -53,9 +61,24 @@
     i{
         margin: 5px
     }
+    .overlay{
+        position: absolute;
+        top:0px;
+        bottom:0px;
+        left:0px;
+        right:0px;
+        background-color: #636363;
+        z-index: 3;
+        display: none;
+    }
+    @media screen and (max-width:700px) {
+        .video-grid{
+            flex-direction: column;
+        }
+    }
 </style>
 <body>
-    <div style="display: flex;align-items: center;justify-content: center;height: 95%;width: 100%;">
+    <div style="display: flex;align-items: center;justify-content: center;height: 100%;width: 100%;">
         <div id="video-grid" class="video-grid">
 
         </div>
