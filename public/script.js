@@ -2,7 +2,7 @@ const socket = io('/')
 //check for user
 const peer = new Peer(undefined,{
     host:'/',
-    port:'3000',
+    port:""+PORT,
     path:"peerjs"
 })
 

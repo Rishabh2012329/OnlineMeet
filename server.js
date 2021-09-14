@@ -20,7 +20,7 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/:room',(req,res)=>{
-    res.render('room',{roomId:req.params.room})
+    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
 })
 
 io.on('connection',(socket)=>{
@@ -31,5 +31,5 @@ io.on('connection',(socket)=>{
     
 })
 
-server.listen(process.env.PORT)
+server.listen(process.env.PORT||3000)
 
