@@ -28,7 +28,9 @@ io.on('connection',(socket)=>{
         await socket.join(roomId)
        io.to(roomId).emit('user-connected',userId)
     })
-    
+    socket.on('messages',(message,userId,roomId)=>{
+        io.to(roomId).emit('messageServer',message,userId)
+    })
 })
 
 server.listen(process.env.PORT||3000)

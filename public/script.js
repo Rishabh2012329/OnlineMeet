@@ -5,6 +5,12 @@ const peer = new Peer(undefined,{
     path:"/peerjs"
 })
 
+// const peer = new Peer(undefined,{
+//         host:'/',
+//         path:"/peerjs",
+//         port:""+PORT
+// })
+
 
 let myVideoStream;
 const myVideo = document.createElement('video')
@@ -45,7 +51,18 @@ peer.on('open',(id)=>{
 })
 
 
-
+function toggleChat(){
+    const chatBox = document.getElementById("chatBox")
+    if(chatBox.style.animationName==="goneMessage"||chatBox.style.animationName===""){
+        chatBox.style.animationName="enterMessage"
+        chatBox.style.animationDuration="0.8s"
+        chatBox.style.transform="translateX(0)"
+    }else{
+        chatBox.style.animationName="goneMessage"
+        chatBox.style.animationDuration="0.8s"
+        chatBox.style.transform="translateX(250px)"
+    }
+}
 // add other uservideos to ours
 function ConnectToAnotherUser(userId,stream){
     const call = peer.call(userId,stream)
@@ -94,7 +111,24 @@ const playStop = () => {
   }
 
 // chat update
-
+function sendMessage(){
+    const input = document.getElementById('chatInput')
+    socket.emit("messages",input.value,peer.id,ROOM_ID)
+    input.value=""
+}
+socket.on('messageServer',(message,uid)=>{
+    const div = document.createElement('div')
+    div.innerHTML=message
+    const outer = document.createElement('div')
+    const user = document.createElement('div')
+    user.innerText=uid
+    outer.classList.add('message-wrapper')
+    user.classList.add('user-name')
+    div.classList.add('message')
+    outer.appendChild(user)
+    outer.appendChild(div)
+    document.getElementById('userMessages').appendChild(outer)
+})
 //video stream
 function addVideoStream(video,stream){
     video.srcObject=stream

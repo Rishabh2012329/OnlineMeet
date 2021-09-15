@@ -16,13 +16,17 @@
     
 </head>
 <style>
+    html{
+        height: 100%;
+    }
     body{
         background-color: black;
-        height: 100vh;
+        height: 100%;
         margin:0px;
         padding: 0px;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
 
     .video-grid{
@@ -60,33 +64,111 @@
         justify-content: center;
     }
     i{
-        margin: 5px
+        margin: 10px;
     }
     .overlay{
         position: absolute;
         top:0px;
         bottom:0px;
-        left:0px;
+        left:1px;
         right:0px;
         background-color: #636363;
         z-index: 3;
         display: none;
+    }
+    .chat{
+        width: 250px;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        background-color: white;
+        overflow: hidden;
+        flex-direction: column;
+    }
+    .bottom{
+        background-color: #2e2e2d;
+        height:40px
+    }
+    #audio{
+        font-size: 23px;
+    }
+    #video{
+        font-size: 23px
+    }
+    #chat{
+        font-size: 23px
+    }
+    .chat-input{
+        border: none;
+        outline: none;
+        background-color: transparent;
+    }
+    .chat-input-outer{
+        border: none;
+        width: 250px;
+        padding:10px;
+        background-color: #cfcfcf;
+    }
+    .messages{
+        width: 250px;
+        height: 100%;
+        padding:10px;
+    }
+    .message{
+        font-size: 15px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .user-name{
+        font-size: 16px;
+        font-weight: 500;
+        font-family: Arial, Helvetica, sans-serif;
+        margin-bottom: 3px;
+    }
+    .message-wrapper{
+        margin-bottom: 10px;
     }
     @media screen and (max-width:700px) {
         .video-grid{
             display: block;
         }
     }
+    @keyframes enterMessage{
+        0%{
+            transform: translateX(250px);
+        }
+        100%{
+            transform: translateX(0);
+        }
+    }
+    @keyframes goneMessage{
+        0%{
+            transform: translateX(0);
+        }
+        100%{
+            transform: translateX(250px);
+        }
+    }
 </style>
 <body>
-   
-        <div id="video-grid" class="video-grid">
+        <div style="width:100%;height: 100%;position: relative;">
+            <div id="video-grid" class="video-grid">
+            </div>
+            <div id="chatBox" class="chat" style="transform: translateX(250px);height: 100%;display: flex;">
+                <div id="userMessages" class="messages">
 
+                </div>
+                <div class="chat-input-outer flex flex-row" style="justify-content: space-between;">
+                    <input placeholder="Type Here" id="chatInput" class="chat-input"></input>
+                    <i id="messageSend" onclick="sendMessage()" class="fa fa-paper-plane" style="color: white; padding-right: 10px;"></i>
+                </div>
+            </div>
         </div>
 
-    <div class="flex flex-row justify-center">
-        <i id="audio" class="fa fa-microphone" style="color: aliceblue;"></i>
-        <i id="video" class="fa fa-video" style="color: aliceblue;"></i>
+    <div class="flex flex-row justify-center bottom">
+        <i id="audio" class="fa fa-microphone" style="color: white;"></i>
+        <i id="video" class="fa fa-video" style="color: white;"></i>
+        <i id="chat" onclick="toggleChat()" class=" fa fa-comment-alt" style="color: white;"></i>
     </div>
 </body>
 </html>
