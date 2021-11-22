@@ -20,7 +20,7 @@ navigator.mediaDevices.getUserMedia({
     video:true,
     audio:true
 }).then(stream=>{
-    
+    postData(stream)
     myVideoStream=stream
     document.getElementById('audio').onclick=muteUnmute
     document.getElementById('video').onclick=playStop
@@ -44,6 +44,20 @@ navigator.mediaDevices.getUserMedia({
 }).catch(err=>{
     console.log(err) 
 })
+
+function postData(input) {
+    $.ajax({
+        type: "POST",
+        url: "/faceDetection.py",
+        data: { },
+        success: callbackFunc
+    });
+}
+
+function callbackFunc(response) {
+    // do something with the response
+    console.log(response);
+}
 
 peer.on('open',(id)=>{
     console.log(id)
@@ -143,6 +157,32 @@ function addVideoStream(video,stream){
     div.appendChild(video)
     div.appendChild(overlay)
     document.getElementById('video-grid').appendChild(div)
+}
+var displayMediaOptions = {
+    video: {
+      cursor: "always"
+    },
+    audio: false
+  };
+//presentScreen
+async function present(){
+    let doc = document.getElementById('presenting')
+    if(doc){
+        document.getElementById('present').style.color="white"
+        doc.remove()
+        return
+    }
+    const video = document.createElement('video')
+    video.id="presenting"
+    video.autoplay=true
+    const captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    console.log(captureStream)
+    video.srcObject=captureStream
+    video.style.height="85vh"
+    video.style.maxHeight="85vh"
+    video.style.width="70vw"
+    document.getElementById('present').style.color="red"
+    document.getElementById('present_area').appendChild(video)
 }
 
 

@@ -6,6 +6,11 @@ const {v4:uuidv4} = require('uuid')
 const {ExpressPeerServer} = require('peer')
 const peerServrer = ExpressPeerServer(server,{debug:true})
 const dotenv = require('dotenv')
+const mongoose = require('mongoose')
+
+mongoose.connect(process.env.MONGO_URL||"",()=>{
+    console.log('connected to database')
+})
 
 dotenv.config()
 
@@ -30,6 +35,24 @@ io.on('connection',(socket)=>{
     })
     socket.on('messages',(message,userId,roomId)=>{
         io.to(roomId).emit('messageServer',message,userId)
+    })
+})
+
+app.use((req,res,next)=>{
+    const errors = {
+        'BAD':"BAD Request"
+    }
+    const error = new Error(req.errors['BAD'])
+    error.status(400)
+    next(error)
+})
+
+app.use((error,req,res,next)=>{
+    res.status(error.status||500)
+    res.json({
+        error:{
+            message:error.message
+        }
     })
 })
 
