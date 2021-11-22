@@ -20,7 +20,6 @@ navigator.mediaDevices.getUserMedia({
     video:true,
     audio:true
 }).then(stream=>{
-    postData(stream)
     myVideoStream=stream
     document.getElementById('audio').onclick=muteUnmute
     document.getElementById('video').onclick=playStop
@@ -45,14 +44,7 @@ navigator.mediaDevices.getUserMedia({
     console.log(err) 
 })
 
-function postData(input) {
-    $.ajax({
-        type: "POST",
-        url: "/faceDetection.py",
-        data: { },
-        success: callbackFunc
-    });
-}
+
 
 function callbackFunc(response) {
     // do something with the response
