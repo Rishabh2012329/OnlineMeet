@@ -9,8 +9,8 @@ const UserSchema = mongoose.Schema({
         type:String,
         require:true
     },
-    rooms:{
-        type:Array,
+    password:{
+        type:String,
         require:true
     }
 })

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo 2">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Meet</title>
+</head>
+<style>
+    body,html{
+        margin:0;
+        padding:0;
+        max-width: 100%;
+    }
+    button{
+        position: relative;
+        cursor: pointer;
+    }
+    nav{
+        padding:10px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        justify-content: space-between;
+        flex-direction: row;
+        display: flex;
+        padding-right: 10px;
+        border-bottom: solid 1px gray;
+        font-family: "Nunito Sans";
+        font-size: larger;
+        align-items: center;
+    }
+    .brand-name{
+        font-size: 22px;
+    }
+    .room-area{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding:10px;
+        padding-top: 30px;
+        max-width: 100%;    
+    }
+    .green-button{
+        border:none;
+        background-color: #08c78b;
+        padding:5px;
+        border-radius: 3px;
+        padding-left: 8px;
+        padding-right: 8px;
+        color:white;
+    }
+    .gray-border-button{
+        border:solid 1px gray;
+        border-radius: 3px;
+        background-color: transparent;
+        padding:5px;
+    }
+    .create-room{
+        font-size: 20px;
+        font-family: "Exo 2";
+        font-weight: 500;
+        border:none;
+        background-color: #08c78b;
+        padding:6px;
+        color:white;
+        border-radius: 3px;
+        width: 160px;
+        height: 40px;
+    }
+    .join-room{
+        font-size: 20px;
+        font-family: "Exo 2";
+        font-weight: 500;
+        border:solid 1px gray;
+        border-radius: 3px;
+        background-color: transparent;
+        padding:5px;
+        width: 160px;
+        height: 40px;
+    }
+    .seperator{
+        width: 500px;
+        max-width: 100%;
+        height: 1px;
+        background-color: gray;
+        margin-top:40px;
+        margin-bottom: 30px;
+    }
+    .list-item{
+        max-width: 100%;
+        font-size: 23px;
+        padding: 25px;
+        margin-bottom:10px;
+        border-radius: 6px;
+        font-weight: 400;
+        color: #343535;
+        transform-style: preserve-3d;
+        border:solid 1px gray;
+        font-family: "Nunito Sans";
+        animation: dscale1;
+        animation-duration: 0.3s;
+    }
+    .list-item:hover{
+        animation: scale1;
+        transform: scale(1.1);
+        animation-duration: 0.3s;
+    }
+    
+    .flex-row{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .modal{
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        position: absolute;
+        z-index: 1;
+        background-color: rgba(0,0,0,0.3);
+        animation: back 0.5s;
+    }
+    .flex-center{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-container{
+        padding:5px;
+        background-color: white;
+        border-radius: 5px;
+        animation: zoom;
+        animation-duration: 0.4s;
+    }
+    input{
+        font-size: large;
+        padding:7px;
+        border-radius: 3px;
+        border: solid 1px gray;
+        margin-bottom: 10px;
+    }
+    button[type="submit"]{
+        background-color: #08c78b;
+        font-size: 20px;
+        font-family: "Exo 2";
+        font-weight: 500;
+        border:none;
+        background-color: #08c78b;
+        padding:6px;
+        color:white;
+        border-radius: 3px;
+    }
+    .form{
+        display: flex;
+        flex-direction: column;
+        margin:3px
+    }
+    .tooltip{
+        display: none;
+    }
+    .arrow-up{
+        width: 0; 
+        height: 0; 
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent; 
+        border-bottom: 5px solid #666666;
+    }
+    .icon:hover .tooltip{
+        display: block;
+        top:110%;
+        position: absolute;
+        width: fit-content;
+        background-color: #666666;
+        border-radius: 5px;
+        color: white;
+        font-size: 13px;
+        padding: 5px;
+        width: 100px;
+        
+    }
+    .tooltip-arrow{
+        top:-4px;
+        position: absolute;
+    }
+    #rooms button{
+        margin-right: 5px;
+    }
+    @keyframes scale1{
+        from{transform: scale(1);}
+        to{transform: scale(1.1);}
+    }
+    @keyframes dscale1{
+        from{transform: scale(1.1);}
+        to{transform: scale(1);}
+    }
+    @keyframes zoom{
+        from{transform: scale(0.6);}
+        to{transform: scale(1);}
+    }
+    @keyframes back{
+        from{background-color: transparent;}
+        to{background-color: rgba(0,0,0,0.3);}
+    }
+    @media  screen and (max-width:400px) {
+        .create-room{
+            width: 100%;
+            margin-bottom:5px
+        }
+        .join-room{
+            width:100%;
+            margin-bottom:5px
+        }
+    }
+    .splash-screen{
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        position: fixed;
+        background-color: #08c78b;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 1s;
+    }
+    .welcome-home{
+        animation: bounce 0.7s ;
+        color: white;
+    }
+    #after-login{
+        flex-direction: row;
+        align-items: center;
+    }
+    #welcome{
+        margin-right: 10px;
+    }
+    .room-extra{
+        align-items: center;
+        justify-content: space-between;
+    }
+    @-webkit-keyframes bounce {
+  0%, 100% {
+    -webkit-transform: translateY(0);
+  }
+  25%{
+    -webkit-transform: translateY(-10px);
+  }
+  50% {
+    -webkit-transform: translateY(0);
+  }
+  75%{
+    -webkit-transform: translateY(-5px);
+  }
+}
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25%{
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75%{
+    transform: translateY(-5px);
+  }
+}
+</style>
+<body>
+    <div id="splash-screen" class="splash-screen">
+        <h1 class="welcome-home">Welcome!</h1>
+    </div>
+    <nav>
+        <span class="nav-item brand-name">
+            Online Meet
+        </span>
+
+        <span id='after-login' class="nav-item" style="display: none;">
+            <span id="welcome" style="font-size: 20px;">Hi Rishabh</span>
+            <button id="logout" class="create-room" onclick="logout()" style="width: 125px;font-size: 18px;height: auto;">
+                logout
+            </button>
+        </span>
+        <span id="loginSignUp" class="nav-item" >
+            <button class="create-room" onclick="openModal('signIn')" style="height: auto;font-size: 18px;width: 125px;">Sign In</button>
+            <button class="join-room" onclick="openModal('register')" style="height: auto;font-size: 18px;width: 125px;">Register</button>
+        </span>
+    </nav>
+
+    <div class="room-area">
+        <div style="width: fit-content;">
+            <button onclick="openModal('createRoom')" class="create-room">
+                Create Room
+            </button>
+            <button  onclick="openModal('joinRoom')" class="join-room">
+                Join room
+            </button>
+        </div>
+
+        <!-- Create Room Form -->
+        <div id="createRoom" class="modal flex-center" style="display: none;">
+            <div class="modal-container">
+                <div class="flex-center" style="justify-content: right; margin-bottom: 5px;">
+                    <i class="fa fa-times" onclick="closeModal('createRoom')"></i>
+                </div>
+                <form class='form' id='createRoomForm'>                    
+                    <input id="name" placeholder="Room Name"/>
+                    <input type="file" id="members" onchange="pareExcel()" placeholder="Upload Members File"/>
+                    <button type="submit">Create Room</button>
+                </form>
+            </div>
+        </div>
+
+         <!-- Join Room Form -->
+         <div id="joinRoom" class="modal flex-center" style="display: none;">
+            <div class="modal-container">
+                <div class="flex-center" style="justify-content: right; margin-bottom: 5px;">
+                    <i class="fa fa-times" onclick="closeModal('joinRoom')"></i>
+                </div>
+                <form class='form' id='joinRoomForm'>                    
+                    <input id="roomId" placeholder="Room ID"/>
+                    <button type="submit">Join Room</button>
+                </form>
+            </div>
+        </div>
+
+         <!-- Sign In Form -->
+         <div id="signIn"  class="modal flex-center" style="display: none;">
+            <div class="modal-container">
+                <div class="flex-center" style="justify-content: right; margin-bottom: 5px;">
+                    <i class="fa fa-times" onclick="closeModal('signIn')"></i>
+                </div>
+                <form class='form' id="signInForm">                    
+                    <input id="email" placeholder="Email"/>
+                    <input id="password" type="password" placeholder="Password"/>
+                    <button type="submit">Sign In</button>
+                </form>
+            </div>
+        </div>
+
+         <!-- Sign up Form -->
+         <div id="register" class="modal flex-center" style="display: none;">
+            <div class="modal-container">
+                <div class="flex-center" style="justify-content: right; margin-bottom: 5px;">
+                    <i class="fa fa-times" onclick="closeModal('register')"></i>
+                </div>
+                <form class='form' id="registerForm">   
+                    <input id="name" placeholder="Name"/>                 
+                    <input id="email" placeholder="Email"/>
+                    <input id="password" type="password" placeholder="Password"/>
+                    <input id="confirmPassword" type="password" placeholder="Confirm Password"/>
+                    <button type="submit" onsubmit="signIn()">Register</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="seperator">
+        </div>
+
+        <!-- Rooms -->
+        <div id="rooms" style="width: 100%;max-width: 600px;margin:auto;margin-top: 10px;">
+            <!-- Room -->
+            
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- add the shim first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/shim.min.js" integrity="sha512-nPnkC29R0sikt0ieZaAkk28Ib7Y1Dz7IqePgELH30NnSi1DzG4x+envJAOHz8ZSAveLXAHTR3ai2E9DZUsT8pQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- after the shim is referenced, add the library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js" integrity="sha512-gtII6Z4fZyONX9GBrF28JMpodY4vIOI0lBjAtN/mcK7Pz19Mu1HHIRvXH6bmdChteGpEccxZxI0qxXl9anY60w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let MEMBERS=[],ROOMS=[]
+        let LOGIN=false
+        let user={}
+        //removing splash screen
+        setTimeout(()=>{
+            document.getElementById('splash-screen').style.transform = 'translateY(-1000px)'
+        },1000)
+        function getValue(id){
+            return document.getElementById(id).value
+        }
+        function clearInput(ids){
+            for(let i=0;i<ids.length;i++)
+                document.getElementById(ids[i]).value=""
+        }
+        async function deleteRoom(id){
+            await axios.delete('/room/deleteRoom/'+id,{id:id}).then((res)=>{
+                document.getElementById(id).remove()
+                ROOMS = ROOMS.filter(obj=>obj._id!=id)
+                if(ROOMS.length==0)
+                    document.getElementById('rooms').innerText="No Room's Created"
+            }).catch(err=>console.log(err))
+        }
+        function createToolkit(name){
+            let toolkit = document.createElement('span')
+            let arrow = document.createElement('div')
+
+            toolkit.classList.add('tooltip')
+            arrow.classList.add('arrow-up','tooltip-arrow')
+
+            toolkit.innerText = name
+            toolkit.appendChild(arrow)
+            return toolkit
+        }
+        function logout(){
+            axios.get('/user/logout',{withCredentials:true}).then((res)=>{
+                LOGIN=false
+                user={}
+                
+                document.getElementById('after-login').style.display = "none"
+                document.getElementById('loginSignUp').style.display = "block"
+                document.getElementById('rooms').innerHTML="Login To See your Room's"
+                document.getElementById('rooms').style.textAlign="center"
+            })
+        }
+        
+        window.onload= async ()=>{
+            await axios.get('/user/checkLogin',{withCredentials:true}).then((res)=>{
+                LOGIN = res.data.logged
+                user=res.data.user
+            }).catch(err=>console.log(err.response))
+            await axios.get('/room/getRooms',{withCredentials:true}).then((res)=>{
+                ROOMS = res.data.rooms
+            }).catch(err=>{
+                document.getElementById('rooms').innerText="Login To See your Room's"
+                document.getElementById('rooms').style.textAlign="center"
+            })
+            if(ROOMS.length == 0&&LOGIN){
+                document.getElementById('rooms').innerText="No Room's Created"
+                document.getElementById('rooms').style.textAlign="center"
+            }
+            for(let i=0;i<ROOMS.length;i++){
+                addRoom(ROOMS[i])
+            }
+            if(LOGIN){
+                document.getElementById('after-login').style.display="flex"
+                let welcome = document.getElementById('welcome')
+                document.getElementById('loginSignUp').style.display = 'none'
+                welcome.innerText="Hi "+user.name+"!"
+            }
+        }
+        function signIn(e){
+            e.preventDefault()
+
+            const email = getValue('email')
+            const password = getValue('password')
+
+            axios.post('/user/login',{email,password},{withCredentials:true}).then(async (res)=>{
+                closeModal('signIn')
+                clearInput(['email','password'])
+                LOGIN=true
+                user = res.data.user
+                document.getElementById('after-login').style.display='flex'
+                document.getElementById('loginSignUp').style.display = 'none'
+                let welcome = document.getElementById('welcome')
+                welcome.style.display = 'flex'
+                welcome.innerText="Hi "+user.name+"!"
+                await axios.get('/room/getRooms',{withCredentials:true}).then((res)=>{
+                ROOMS = res.data.rooms
+                document.getElementById('rooms').innerText=""
+                for(let i=0;i<ROOMS.length;i++){
+                    addRoom(ROOMS[i])
+                 }
+                }).catch(err=>{
+                    document.getElementById('rooms').innerText="Login To See your Room's"
+                    document.getElementById('rooms').style.textAlign="center"
+                })
+            }).catch((error)=>console.log(error.response))
+            
+        }
+
+        function register(e){
+            e.preventDefault()
+            const name = getValue('name')
+            const email = getValue('email')
+            const password = getValue('password')
+            const confirmPassword = getValue('confirmPassword')
+            console.log(name,email,password)
+            if(password===confirmPassword){
+                axios.post('/user/register',{name,email,password},{withCredentials:true}).then((res)=>{
+                    alert(res.data.message)
+                }).catch((error)=>console.log(error.response.message))
+            }else{
+                alert('password does not match with confirm password')
+            }
+        }
+        function addRoom(data){
+            const Room = document.createElement('div')
+            Room.id = data._id
+            const name = document.createElement('span')
+            const buttons = document.createElement('span')
+            const delButton = document.createElement('button')
+            const uploadButton = document.createElement('button')
+            const sheduleButton = document.createElement('button')
+            const delTooltip = createToolkit("Delete Room")
+            const sheduleTooltip = createToolkit('Shedule Meeting')
+            const uploadTooltip = createToolkit('Upload Members File')
+            const plusIcon = document.createElement('i')
+            plusIcon.classList.add('fa','fa-plus')
+            const uploadIcon = document.createElement('i')
+            uploadIcon.classList.add('fa','fa-upload')
+            const delIcon = document.createElement('i')
+            delIcon.classList.add('fa','fa-trash')
+            const Input = document.createElement('input')
+            Input.hidden=true
+            Input.id=data._id+"upload"
+            delButton.onclick=()=>{
+                alert("clicked")
+                deleteRoom(data._id)
+            }
+
+            Room.classList.add('list-item','flex-row','room-extra')
+            name.innerText=data.name
+            Room.appendChild(name)
+           
+            delButton.classList.add('green-button','icon')
+            delButton.appendChild(delIcon)
+            delButton.appendChild(delTooltip)
+            sheduleButton.classList.add('green-button','icon')
+            sheduleButton.appendChild(plusIcon)
+            sheduleButton.appendChild(sheduleTooltip)
+            uploadButton.classList.add('green-button','icon')
+            uploadButton.appendChild(uploadIcon)
+            uploadButton.appendChild(uploadTooltip)
+            buttons.appendChild(sheduleButton)
+            buttons.appendChild(uploadButton)
+            buttons.appendChild(delButton)
+            Room.appendChild(buttons)
+
+            document.getElementById('rooms').appendChild(Room)
+        }
+        function createRoom(e){
+            e.preventDefault()
+            let name = getValue('name')
+            axios.post('/room/createRoom',{name,members:MEMBERS},{withCredentials:true}).then((res)=>{
+                clearInput(['name'])
+                closeModal('createRoom')
+                if(ROOMS.length==0)
+                    document.getElementById('rooms').innerText=""
+                ROOMS.push(res.data.room)
+                addRoom(res.data.room)
+            }).catch(err=>{console.log(err)})
+        }
+        function joinRoom(e){
+            e.preventDefault()
+            const roomId = getValue('roomId')
+            
+            window.location.href = "http://localhost:3000/"+roomId
+        }
+        const obj = {
+            "signIn":signIn,
+            "register":register,
+            'createRoom':createRoom,
+            'joinRoom':joinRoom
+        }
+        
+        function closeModal(id){
+            console.log("closingModal")
+            document.getElementById(id+"Form").removeEventListener('submit',obj[id])
+            document.getElementById(id).style.display="none"
+        }
+        let cred = ['signIn','register']
+        function openModal(id){
+            if(!LOGIN&&!cred.includes(id))
+                id="signIn"
+            document.getElementById(id).style.display="flex"
+            document.getElementById(id+"Form").addEventListener('submit',obj[id])
+        }
+        function pareExcel(){
+
+            const element  = document.getElementById('members')
+            const file = element.files[0]
+            const fileReader = new FileReader()
+            fileReader.readAsArrayBuffer(file)
+
+            fileReader.onload=()=>{
+                const buffer = fileReader.result
+                var rd = XLSX.read(buffer)
+                const first_worksheet = rd.Sheets[rd.SheetNames[0]];
+                const data = XLSX.utils.sheet_to_json(first_worksheet,{header:1}); //our Team data
+                let col;
+                for(let i=0;i<data[0].length;i++){
+                    if(data[i]=='email')
+                        col = i;
+                }
+                console.log(col)
+                let members=[]; 
+                for(let i=1;i<data.length;i++){
+                    members.push(data[i][col])
+                }
+                console.log(members)
+                MEMBERS=members
+            }
+        }
+
+        
+        
+    </script>
+
+</body>
+</html>

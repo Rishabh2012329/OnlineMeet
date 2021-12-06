@@ -5,12 +5,6 @@ const peer = new Peer(undefined,{
     path:"/peerjs"
 })
 
-// const peer = new Peer(undefined,{
-//         host:'/',
-//         path:"/peerjs",
-//         port:""+PORT
-// })
-
 
 let myVideoStream;
 const myVideo = document.createElement('video')
@@ -20,6 +14,7 @@ navigator.mediaDevices.getUserMedia({
     video:true,
     audio:true
 }).then(stream=>{
+    postData(stream)
     myVideoStream=stream
     document.getElementById('audio').onclick=muteUnmute
     document.getElementById('video').onclick=playStop
@@ -56,7 +51,7 @@ peer.on('open',(id)=>{
     socket.emit('join-room',ROOM_ID,id)
 })
 
-
+//chats display toggle
 function toggleChat(){
     const chatBox = document.getElementById("chatBox")
     if(chatBox.style.animationName==="goneMessage"||chatBox.style.animationName===""){
@@ -177,6 +172,7 @@ async function present(){
     document.getElementById('present_area').appendChild(video)
 }
 
+//Video Playing and Stoping Options
 
 const setPlayVideo=()=>{
     document.getElementById('video').classList.remove('fa-video-slash')
@@ -186,6 +182,8 @@ const setStopVideo=()=>{
     document.getElementById('video').classList.remove('fa-video')
     document.getElementById('video').classList.add('fa-video-slash')
 }
+
+// Audio Playing and Stoping Options
 
 const setPlayAudio=()=>{
     document.getElementById('audio').classList.remove('fa-microphone-slash')

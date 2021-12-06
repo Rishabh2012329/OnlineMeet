@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const {register,login} = require('../controllers/user')
+const {register, login, userProfile, checkLogin,logout} = require('../controllers/user')
+const {verifyToken} = require('../Middlewares/auth')
 
 router.post('/register',register)
 router.post('/login',login)
-router.post('/createRoom')
-router.post('/notifyMembers')
 
-router.get('/userProfile')
+router.get('/logout',verifyToken,logout)
+router.get('/checkLogin',verifyToken,checkLogin)
+router.get('/userProfile/:id',verifyToken,userProfile)
 
 module.exports = router
