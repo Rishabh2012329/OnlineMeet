@@ -13,6 +13,7 @@ const User = require('./models/Users')
 const { verifyTokenExternal, verifyToken } = require('./Middlewares/auth')
 const cookieParser = require('cookie-parser')
 const roomRoute = require('./Routes/room')
+const path = require('path')
 var ObjectId = require('mongoose').Types.ObjectId;
 
 dotenv.config()
@@ -24,7 +25,7 @@ mongoose.connect(process.env.MONGO_URL||"",(error,res)=>{
 
 
 app.set('view engine','ejs')
-
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'))
 app.use(express.json())
 app.use(cookieParser())
