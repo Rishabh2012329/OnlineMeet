@@ -45,11 +45,11 @@ app.get("/stream",async (req,res,next)=>{
 })
 
 app.get('/streamRoom',async (req,res,next)=>{
-    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
+    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||5050})
 })
 
 app.get('/external/:room',verifyTokenExternal,async (req,res)=>{
-    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
+    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||5050})
 })
 
 io.on('connection',(socket)=>{ 

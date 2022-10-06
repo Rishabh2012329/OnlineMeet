@@ -1,7 +1,7 @@
 const socket = io('/')
 //check for user
 const peer = new Peer(undefined,{
-    host:'onlinemeet12.herokuapp.com',
+    host:'online-meet-rishabh2012329.vercel.app',
     path:"/peerjs"
 })
 
