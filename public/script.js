@@ -14,7 +14,7 @@ navigator.mediaDevices.getUserMedia({
     video:true,
     audio:true
 }).then(stream=>{
-    postData(stream)
+   
     myVideoStream=stream
     document.getElementById('audio').onclick=muteUnmute
     document.getElementById('video').onclick=playStop
