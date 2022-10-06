@@ -39,35 +39,17 @@ app.get('/',(req,res)=>{
     res.render('home')
 })
 
-app.get('/:room',verifyToken,async (req,res,next)=>{
-    if(!req.body.userId){
-        req.error = "NOT_LOGGED"
-        return next()
-    }
-    if(!ObjectId.isValid(req.params.room)){
-        req.error = "NOT_FOUND"
-        return next()
-    }
-    const room = await Room.findOne({_id:req.params.room})
-    if(!room){
-        req.error = "NOT_FOUND"
-        return next()
-    }
-    const usr = await User.findOne({_id:req.body.userId})
+app.get("/stream",async (req,res,next)=>{
+    peerServrer.call("stream",["Stream"])
+    res.send("Hello")
+})
 
-    if(usr._id!==room.uid&&(!room.email.includes(usr?.email)||!usr)){
-        req.error = "NOT_LOGGED"
-        return next()
-    }
+app.get('/streamRoom',async (req,res,next)=>{
     res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
 })
 
 app.get('/external/:room',verifyTokenExternal,async (req,res)=>{
-    const {email} = req.user
-    let roomId = req.params.room
-    const room = await Room.findOne({_id:roomId})
-    if(room.members.includes(email))
-        res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
+    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||3000})
 })
 
 io.on('connection',(socket)=>{ 
