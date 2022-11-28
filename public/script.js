@@ -25,6 +25,9 @@ navigator.mediaDevices.getUserMedia({
         call.on('stream',userVideoStream=>{
             addVideoStream(video,userVideoStream)
         })
+        call.on('drone',droneStream=>{
+            addVideoStream(video,droneStream)
+        })
     })
     addVideoStream(myVideo,stream)
     socket.on('user-connected',(userId)=>{

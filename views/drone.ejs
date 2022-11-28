@@ -9,9 +9,9 @@
     <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js" defer></script>
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="script.js" defer></script>
+   
     <script>
-        const ROOM_ID = "<%= roomId %>"
+        const ROOM_ID = "1234"
         const PORT = "<%= PORT %>"
     </script>
     
@@ -153,13 +153,13 @@
 <body>
         <div style="width:100%;height: 100%;position: relative;height: 100%;">
             <div style="display: flex;flex-direction: row;padding: 10px;align-items: center;height: 100%;">
-                <div id="present_area" class="present_area" style="width: 100%;height: 600px;max-height: 600px; color: white;background-color: gray; border-radius: 10px;overflow: hidden;">
+                <div id="present_area" class="present_area" style="width: 100%;height: 600px;max-height: 600px; color: white;background-color: gray; border-radius: 10px;">
                     
-                    <img src="http://192.168.43.122:81/stream" width="100%" height="100%">
+                    <h1 style="text-align: center;">Drone</h1>
                     
                 </div>
                 <div id="video-grid" class="video-grid">
-                    
+                    <img src="http://192.168.43.122:81/stream" width="100%" height="100%">
                 </div>
             </div>
             
@@ -173,12 +173,143 @@
                 </div>
             </div>
         </div>
+        <script>
+                const socket = io('/')
+//check for user
+const peer = new Peer(undefined,{
+    host:'online-meet-69.herokuapp.com',
+    path:"/peerjs"
+})
 
-    <div class="flex flex-row justify-center bottom">
-        <i id="audio" class="fa fa-microphone" style="color: white;"></i>
-        <i id="video" class="fa fa-video" style="color: white;"></i>
-        <!-- <i id="present" onclick="present()" class="fa fa-desktop" style="color: white;"></i> -->
-        <i id="chat" onclick="toggleChat()" class=" fa fa-comment-alt" style="color: white;"></i>
-    </div>
-</body>
+
+let myVideoStream;
+const myVideo = document.createElement('video')
+myVideo.muted=true
+alert("Hi")
+navigator.mediaDevices.getUserMedia({
+    video:true,
+    audio:true
+}).then(stream=>{
+   
+    myVideoStream=stream
+    alert(`${myVideoStream.getVideoTracks().length}`)
+    document.getElementById('audio').onclick=muteUnmute
+    document.getElementById('video').onclick=playStop
+    // provide our stream
+    peer.on('call',call=>{
+        call.answer(stream)
+        const video = document.createElement("video")
+        call.on('stream',userVideoStream=>{
+            addVideoStream(video,userVideoStream)
+        })
+        call.on('drone',droneStream=>{
+            addVideoStream(video,droneStream)
+        })
+    })
+    addVideoStream(myVideo,stream)
+    socket.on('user-connected',(userId)=>{
+        if(userId!==peer.id)
+            setTimeout(ConnectToAnotherUser,3000,userId,stream);
+        
+    })
+    peer.on('error',err=>{
+        console.log(err)
+    })
+}).catch(err=>{
+    console.log(err) 
+})
+
+
+
+function callbackFunc(response) {
+    // do something with the response
+    console.log(response);
+}
+
+peer.on('open',(id)=>{
+    console.log(id)
+    socket.emit('join-room',ROOM_ID,id)
+})
+
+//chats display toggle
+function toggleChat(){
+    const chatBox = document.getElementById("chatBox")
+    if(chatBox.style.animationName==="goneMessage"||chatBox.style.animationName===""){
+        chatBox.style.animationName="enterMessage"
+        chatBox.style.animationDuration="0.8s"
+        chatBox.style.transform="translateX(0)"
+    }else{
+        chatBox.style.animationName="goneMessage"
+        chatBox.style.animationDuration="0.8s"
+        chatBox.style.transform="translateX(250px)"
+    }
+}
+// add other uservideos to ours
+function ConnectToAnotherUser(userId,stream){
+    const call = peer.call(userId,stream)
+    const video = document.createElement("video")
+    call.on('stream',userVideoStream=>{
+        console.log("streamUser ",userVideoStream)
+        addVideoStream(video,userVideoStream)
+    })
+    
+    call.on('error',(error)=>{
+        console.log(error);
+    })
+    peer.on('error', function(err) {
+        console.log(err);
+    });
+}
+
+// remove video when a user leaves
+
+// send video and audio
+
+
+
+
+
+
+// chat update
+function sendMessage(){
+    const input = document.getElementById('chatInput')
+    socket.emit("messages",input.value,peer.id,ROOM_ID)
+    input.value=""
+}
+socket.on('messageServer',(message,uid)=>{
+    const div = document.createElement('div')
+    div.innerHTML=message
+    const outer = document.createElement('div')
+    const user = document.createElement('div')
+    user.innerText=uid
+    outer.classList.add('message-wrapper')
+    user.classList.add('user-name')
+    div.classList.add('message')
+    outer.appendChild(user)
+    outer.appendChild(div)
+    document.getElementById('userMessages').appendChild(outer)
+})
+//video stream
+function addVideoStream(video,stream){
+    video.srcObject=stream
+    const div = document.createElement('div')
+    div.classList.add('videoOuter')
+    const overlay = document.createElement('div')
+    overlay.classList.add('overlay')
+    
+    video.addEventListener('loadedmetadata',()=>{
+        video.play()
+    })
+    div.appendChild(video)
+    div.appendChild(overlay)
+    document.getElementById('video-grid').appendChild(div)
+}
+
+
+
+
+
+
+        </script>
+    </body>
 </html>

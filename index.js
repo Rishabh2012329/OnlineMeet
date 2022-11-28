@@ -18,6 +18,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 dotenv.config()
 
+let ROOM_ID = "1234"
+
 mongoose.connect(process.env.MONGO_URL||"",(error,res)=>{
     console.log('connected to database')
 })
@@ -45,12 +47,19 @@ app.get("/stream",async (req,res,next)=>{
 })
 
 app.get('/streamRoom',async (req,res,next)=>{
-    res.render('room',{roomId:req.params.room,PORT:process.env.PORT||5050})
+    res.render('room',{roomId:ROOM_ID, PORT:process.env.PORT||5050})
 })
+
+app.get('/droneRoom',async (req,res,next)=>{
+    res.render('drone',{roomId:ROOM_ID, PORT:process.env.PORT||5050})
+})
+
 
 app.get('/external/:room',verifyTokenExternal,async (req,res)=>{
     res.render('room',{roomId:req.params.room,PORT:process.env.PORT||5050})
 })
+
+
 
 io.on('connection',(socket)=>{ 
     //Joining Room
