@@ -5,6 +5,54 @@ const peer = new Peer(undefined,{
     path:"/peerjs"
 })
 
+async function work(){
+    console.log("Buffer")
+    
+   const image =  document.getElementById('my-img')
+    fetch('http://192.168.43.122:81/stream')
+  // Retrieve its body as ReadableStream
+  .then((response) => {
+    console.log("Inside Response")
+    const reader = response.body.getReader();
+    return new ReadableStream({
+      start(controller) {
+        return pump();
+        function pump() {
+          return reader.read().then(function process({ done, value }) {
+            // When no more data needs to be consumed, close the stream
+            if (done) {
+              controller.close();
+              return;
+            }
+            // Enqueue the next data chunk into our target stream
+            controller.enqueue(value);
+            return;
+          });
+        }
+      }
+    })
+  })
+  // Create a new response out of the stream
+  .then((stream) => new Response(stream))
+  // Create an object URL for the response
+  .then((response) => response.blob())
+  .then((blob) => URL.createObjectURL(blob))
+  // Update image
+  .then((url) => console.log(url))
+  .catch((err) => console.error(err));
+    //const reader = response.body.getReader()
+
+
+    // reader.read().then(function processText({done,value}){
+    //     const content = value
+       
+    //     return reader.read().then(processText)
+    // })
+
+}
+
+// work()
+
 
 let myVideoStream;
 const myVideo = document.createElement('video')

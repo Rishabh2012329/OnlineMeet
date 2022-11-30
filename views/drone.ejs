@@ -174,12 +174,14 @@
             </div>
         </div>
         <script>
-                const socket = io('/')
-//check for user
-const peer = new Peer(undefined,{
-    host:'online-meet-69.herokuapp.com',
-    path:"/peerjs"
-})
+            
+            const socket = io('/')
+
+        //check for user
+        const peer = new Peer(undefined,{
+            host:'online-meet-69.herokuapp.com',
+            path:"/peerjs"
+        })
 
 
 let myVideoStream;
